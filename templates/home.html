@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Petani</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .section { display: none; }
+    .section.active { display: block; }
+    .nav-btn { margin: 5px; padding: 10px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 6px; }
+    .nav-btn:hover { background: #0056b3; }
+  </style>
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="navbar">
+    <button class="nav-btn" onclick="showSection('home')">Home</button>
+    <button class="nav-btn" onclick="showSection('biodata')">Biodata</button>
+    <button class="nav-btn" onclick="showSection('komoditas')">Komoditas</button>
+    <button class="nav-btn" onclick="showSection('hasil')">Hasil Panen</button>
+    <a href="/logout" class="nav-btn" style="background:#dc3545">Logout</a>
+  </div>
+
+  <div class="container">
+
+    <div id="home" class="section active">
+      <h2>Selamat datang, {{ nama }}!</h2>
+
+      {% if biodata %}
+      <div class="card">
+        <h3>Biodata</h3>
+        <p>Nama Lengkap: {{ biodata.nama_lengkap }}</p>
+        <p>Tanggal Lahir: {{ biodata.tanggal_lahir }}</p>
+        <p>Umur: {{ biodata.umur }}</p>
+        <p>Tempat Tinggal: {{ biodata.tempat_tinggal }}</p>
+        <p>NIK: {{ biodata.nik }}</p>
+      </div>
+      {% endif %}
+
+      {% if komoditas %}
+      <div class="card">
+        <h3>Komoditas</h3>
+        <p>Jenis Komoditas: {{ komoditas.komoditas }}</p>
+        <p>Luas Lahan: {{ komoditas.luas }}</p>
+      </div>
+      {% endif %}
+
+      {% if hasil %}
+      <div class="card">
+        <h3>Hasil Panen</h3>
+        <p>Komoditas: {{ hasil.komoditas }}</p>
+        <p>Bulan: {{ hasil.bulan }}</p>
+        <p>Hasil Panen: {{ hasil.hasil }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <div id="biodata" class="section">
+      <h2>Form Biodata</h2>
+      <form method="POST" action="/biodata">
+        <input type="text" name="nama_lengkap" placeholder="Nama Lengkap" required>
+        <input type="date" name="tanggal_lahir" required>
+        <input type="number" name="umur" placeholder="Umur" required>
+        <input type="text" name="tempat_tinggal" placeholder="Tempat Tinggal" required>
+        <input type="text" name="nik" placeholder="NIK" required>
+        <button type="submit">Simpan</button>
+      </form>
+    </div>
+
+    <div id="komoditas" class="section">
+      <h2>Form Komoditas</h2>
+      <form method="POST" action="/komoditas">
+        <input type="text" name="komoditas" placeholder="Jenis Komoditas" required>
+        <input type="text" name="luas" placeholder="Luas Lahan (ha)" required>
+        <button type="submit">Simpan</button>
+      </form>
+    </div>
+
+    <div id="hasil" class="section">
+      <h2>Form Hasil Panen</h2>
+      <form method="POST" action="/hasil_panen">
+        <input type="text" name="komoditas" placeholder="Jenis Komoditas" required>
+        <input type="text" name="bulan" placeholder="Bulan" required>
+        <input type="number" name="hasil" placeholder="Hasil Panen (kg)" required>
+        <button type="submit">Simpan</button>
+      </form>
+    </div>
+
+  </div>
+</body>
+</html>
